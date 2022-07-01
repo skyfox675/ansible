@@ -2,10 +2,11 @@
 # file: roles/azure-storage-container-blob/tasks/main.yml
 
 - name: List Azure Storage Container Blobs
-  shell: az storage blob list --container-name test --account-name cs21003200181026bbb --only-show-errors
+  shell: "az storage blob list --container-name test --account-name cs21003200181026bbb --prefix {{ inventory_hostname }} --only-show-errors"
   # args:
   #   executable: /bin/zsh
   register: blobs_raw
+  # delegate_to: localhost
 
 - name: Set Fact to parse JSON
   set_fact:
