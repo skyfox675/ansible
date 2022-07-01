@@ -1,0 +1,5 @@
+---
+# file: test_playbook.yml
+- hosts: localhost
+  roles:
+    - azure-storage-container-blob

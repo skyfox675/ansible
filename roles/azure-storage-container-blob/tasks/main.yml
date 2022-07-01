@@ -1,0 +1,35 @@
+---
+# file: roles/azure-storage-container-blob/tasks/main.yml
+
+- name: List Azure Storage Container Blobs
+  shell: az storage blob list --container-name test --account-name cs21003200181026bbb --only-show-errors
+  # args:
+  #   executable: /bin/zsh
+  register: blobs_raw
+
+- name: Set Fact to parse JSON
+  set_fact:
+    blobs: "{{ blobs_raw.stdout }}"
+
+- name: Set Fact to parse JSON
+  set_fact:
+    settings_blobs: "{{ blobs | map(attribute='name') | select('search', 'Settings*') | flatten | reverse }}"
+    tsm_blobs: "{{ blobs | map(attribute='name') | select('search', 'tsm_export_*') | flatten | reverse }}"
+
+- name: debug blobs
+  debug:
+    msg: "{{ settings_blobs[0] }}"
+
+- name: debug blobs
+  debug:
+    msg: "{{ tsm_blobs[0] }}"
+
+# - name: generate files
+#   file:
+#     state: touch
+#     path: "~/tmp/tsm_export_{{ ansible_date_time.iso8601_basic_short }}.bak"
+
+# - name: generate files
+#   file:
+#     state: touch
+#     path: "~/tmp/Settings{{ ansible_date_time.iso8601_basic_short }}.bak"
